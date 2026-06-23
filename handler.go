@@ -36,11 +36,14 @@ func echoText(w http.ResponseWriter, r *http.Request) {
 }
 
 func HeadersDetective(w http.ResponseWriter, r *http.Request) {
-	token := r.Header.Get("X-Custom-Token")
 
-	if token == "" {
-		http.Error(w, "bad request", http.StatusBadRequest)
+	tokens := r.Header.Get("X-Custom-Token")
+
+	if tokens == "" {
+		http.Error(w, "X-Custom-Token header is missing", http.StatusBadRequest)
 		return
+	} else {
+		fmt.Fprintf(w, "Token received: %s", tokens)
 	}
 
 	contentType := r.Header.Get("Content-Type")
@@ -51,4 +54,32 @@ func HeadersDetective(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Content-Type: %s\n", contentType)
 	}
 
+}
+
+func Forming(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Invalid form value", http.StatusBadRequest)
+		return
+	}
+
+	user := r.Form.Get("username")
+	lang := r.Form.Get("language")
+
+	if user == "" {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+	if lang == "" {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf( "Hello %s, you are coding in %s", user, lang)
 }
