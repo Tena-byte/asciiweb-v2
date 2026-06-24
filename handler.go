@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"text/template"
 )
 
 func MethodChecks(w http.ResponseWriter, r *http.Request) {
@@ -94,20 +95,78 @@ func StatusCheck(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "code must be a valid integer", 400)
 		return
 	}
-	
 
-	if codevalue < 100 || codevalue > 599{
-		http.Error(w,  "code must be a valid HTTP status code (100–599)", 400)
+	if codevalue < 100 || codevalue > 599 {
+		http.Error(w, "code must be a valid HTTP status code (100–599)", 400)
 		return
 	}
 
 	w.WriteHeader(codevalue)
 
-	if codevalue != http.StatusNoContent{
-		fmt.Fprintf(w,  "Responding with status %d", codevalue)
+	if codevalue != http.StatusNoContent {
+		fmt.Fprintf(w, "Responding with status %d", codevalue)
 		return
 	}
 
+}
+
+//6
+
+func pingHandler(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Fprintln(w, "pong")
+}
+
+func greetHandler(w http.ResponseWriter, r *http.Request) {
+
+	name := r.URL.Query().Get("name")
+
+	if name == "" {
+		fmt.Fprintln(w, "Greetings, Stranger!")
+	} else {
+		fmt.Fprintf(w, "Greetings, %s!", name)
+	}
+}
+
+//7
+
+func render(w http.ResponseWriter, r *http.Request) {
+
+	type PageData struct {
+		Title string
+		Body  string
+	}
+
+	const tmplStr = `
+		<!DOCTYPE html>
+		<html>
+			<head><title>{{.Title}}</title></head>
+			<body>
+				<h1>{{.Title}}</h1>
+				<p>{{.Body}}</p>
+			</body>
+		</html>
+`
+
+	data := PageData{}
+
+	title := r.URL.Query().Get("title")
+	body := r.URL.Query().Get("body")
+
+	data.Title = title
+	data.Body = body
 	
-	
+	if title == "" || body == ""{
+		http.Error(w, "title and body are required", http.StatusBadRequest)
+		return
+	}
+ 
+	tmpl := template.Must(template.New("page").Parse(tmplStr))
+
+	w.Header().Set("Content-Type", "text/plain")
+
+	err := tmpl.Execute(w, data)
+	if err != nil {
+		http.Error(w,  "template execution failed", 500)
+	}
 }

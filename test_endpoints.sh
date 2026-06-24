@@ -61,9 +61,11 @@ if [[ "$R6P" == *"pong"* ]]; then echo -e "${GREEN}✔ PASS: subtree route ping 
 # Exercise 7: /render (template)
 echo -e "\n${BLUE}[Exercise 7: /render]${NC}"
 R7=$(curl -s "$SERVER_URL/render?title=SENTINEL&body=Online")
-if [[ "$R7" == *"SENTINEL"* && "$R7" == *"Online"* ]]; then echo -e "${GREEN}✔ PASS: template rendered${NC}"; else echo -e "${RED}✘ FAIL: got '$R7'${NC}"; fi
+if [[ "$R7" == *"SENTINEL"* && "$R7" == *"Online"* ]]; then echo -e "${GREEN}✔ PASS: template rendered${NC}"; 
+else echo -e "${RED}✘ FAIL: got '$R7'${NC}"; fi
 R7E=$(curl -s -o /dev/null -w "%{http_code}" "$SERVER_URL/render")
-if [ "$R7E" == "400" ]; then echo -e "${GREEN}✔ PASS: missing params returns 400${NC}"; else echo -e "${RED}✘ FAIL: expected 400 got $R7E${NC}"; fi
+if [ "$R7E" == "400" ]; then echo -e "${GREEN}✔ PASS: missing params returns 400${NC}"; 
+else echo -e "${RED}✘ FAIL: expected 400 got $R7E${NC}"; fi
 
 echo -e "\n${BLUE}=== Verification Complete ===${NC}"
 
