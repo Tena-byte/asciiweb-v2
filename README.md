@@ -196,10 +196,12 @@
 
 
    **Exercise 7: Template Renderer**
+
             Goal
             Build a /render endpoint that accepts two query parameters — title and body — and renders them into an inline HTML template. The template must be defined inside your Go file as a string constant, parsed with html/template, and executed into the ResponseWriter. No external HTML files.
             
    **Key Tasks**
+   
             ●     Define an HTML template as a raw string constant inside your .go file:
             
             const tmplStr = `
