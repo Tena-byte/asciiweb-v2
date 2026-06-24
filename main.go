@@ -17,6 +17,8 @@ func main(){
 	mux.HandleFunc("/echo", echoText)
 	mux.HandleFunc("/headers", HeadersDetective)
 	mux.HandleFunc("/form", Forming)
+	mux.HandleFunc("/status", StatusCheck)
+
 
 
 	fmt.Println("server is running on http://localhost:3000")

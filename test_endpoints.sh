@@ -27,22 +27,29 @@ if [ "$R2G" == "405" ]; then echo -e "${GREEN}✔ PASS: GET blocked with 405${NC
 # Exercise 3: /headers
 echo -e "\n${BLUE}[Exercise 3: /headers]${NC}"
 R3=$(curl -s -H "X-Custom-Token: abc123" "$SERVER_URL/headers")
-if [[ "$R3" == *"abc123"* ]]; then echo -e "${GREEN}✔ PASS: header echoed${NC}"; else echo -e "${RED}✘ FAIL: got '$R3'${NC}"; fi
+if [[ "$R3" == *"abc123"* ]]; then echo -e "${GREEN}✔ PASS: header echoed${NC}"; 
+else echo -e "${RED}✘ FAIL: got '$R3'${NC}"; fi
 R3E=$(curl -s "$SERVER_URL/headers")
-if [[ "$R3E" == *"missing"* || "$R3E" == *"Missing"* ]]; then echo -e "${GREEN}✔ PASS: missing header handled${NC}"; else echo -e "${RED}✘ FAIL: got '$R3E'${NC}"; fi
+if [[ "$R3E" == *"missing"* || "$R3E" == *"Missing"* ]]; then echo -e "${GREEN}✔ PASS: missing header handled${NC}"; 
+else echo -e "${RED}✘ FAIL: got '$R3E'${NC}"; fi
 
 # Exercise 4: /form
 echo -e "\n${BLUE}[Exercise 4: /form]${NC}"
 R4=$(curl -s -X POST -d "username=Ada&language=Go" "$SERVER_URL/form")
-if [[ "$R4" == *"Ada"* && "$R4" == *"Go"* ]]; then echo -e "${GREEN}✔ PASS: form parsed${NC}"; else echo -e "${RED}✘ FAIL: got '$R4'${NC}"; fi
+if [[ "$R4" == *"Ada"* && "$R4" == *"Go"* ]]; then echo -e "${GREEN}✔ PASS: form parsed${NC}"; 
+else echo -e "${RED}✘ FAIL: got '$R4'${NC}"; fi
 R4E=$(curl -s -o /dev/null -w "%{http_code}" -X POST -d "username=&language=Go" "$SERVER_URL/form")
-if [ "$R4E" == "400" ]; then echo -e "${GREEN}✔ PASS: empty field returns 400${NC}"; else echo -e "${RED}✘ FAIL: expected 400 got $R4E${NC}"; fi
+if [ "$R4E" == "400" ]; then echo -e "${GREEN}✔ PASS: empty field returns 400${NC}"; 
+else echo -e "${RED}✘ FAIL: expected 400 got $R4E${NC}"; fi
+
 # Exercise 5: /status
 echo -e "\n${BLUE}[Exercise 5: /status]${NC}"
 R5=$(curl -s -o /dev/null -w "%{http_code}" "$SERVER_URL/status?code=404")
-if [ "$R5" == "404" ]; then echo -e "${GREEN}✔ PASS: 404 returned${NC}"; else echo -e "${RED}✘ FAIL: expected 404 got $R5${NC}"; fi
+if [ "$R5" == "404" ]; then echo -e "${GREEN}✔ PASS: 404 returned${NC}"; 
+else echo -e "${RED}✘ FAIL: expected 404 got $R5${NC}"; fi
 R5B=$(curl -s -o /dev/null -w "%{http_code}" "$SERVER_URL/status?code=banana")
-if [ "$R5B" == "400" ]; then echo -e "${GREEN}✔ PASS: bad code returns 400${NC}"; else echo -e "${RED}✘ FAIL: expected 400 got $R5B${NC}"; fi
+if [ "$R5B" == "400" ]; then echo -e "${GREEN}✔ PASS: bad code returns 400${NC}"; 
+else echo -e "${RED}✘ FAIL: expected 400 got $R5B${NC}"; fi
 
 # Exercise 6: /api/v1/greet (ServeMux subtree)
 echo -e "\n${BLUE}[Exercise 6: /api/v1/greet]${NC}"
